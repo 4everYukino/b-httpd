@@ -1,0 +1,7 @@
+Get /data?game=DOTA2&module=MySQL HTTP/1.1
+Content-Type: application/json
+Referer: http://192.168.18.113:50305/d2/backupd/index.html
+X-CSRF-Token: 0992811f75dc27c7acd37db3e8d0b4a2
+Accept-Encoding: gzip, deflate
+
+{ "callee": "TDSQL", "caller": "DES", "eventId": 101, "Object": { "Name": "BruceW", "Age": 20 }, "Players": [{ "POS1": "Bruce1" }, { "POS2": "Bruce2" }] }

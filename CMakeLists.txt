@@ -15,6 +15,13 @@ ADD_SUBDIRECTORY(${THIRD_DIR}/jsoncpp)
 
 INCLUDE_DIRECTORIES(${THIRD_DIR}/jsoncpp/include)
 
+# Find Boost
+
+find_package(Boost)
+if (NOT Boost_FOUND)
+    message(FATAL_ERROR "Not found Boost, please install Boost first.")
+endif()
+
 # Add source files
 
 AUX_SOURCE_DIRECTORY(./http SOURCE_LIST)
@@ -29,4 +36,4 @@ add_executable(bHTTP ${SOURCE_LIST})
 
 # Link to libs
 
-target_link_libraries(bHTTP jsoncpp_lib spdlog)
+target_link_libraries(bHTTP ${Boost_LIBRARIES} jsoncpp_lib spdlog)
