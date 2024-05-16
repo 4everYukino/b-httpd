@@ -17,10 +17,12 @@ public:
     void headers(const HTTP_Headers& headers);
     HTTP_Headers headers() const;
     HTTP_Headers& headers();
+    void print_headers() const;
 
     void body(const char* body);
     std::string body() const;
     std::string& body();
+    void print_body() const;
 
     bool handle_first_line(const std::string& line);
     virtual bool handle_first_line_i(const std::vector<std::string>& vec) = 0;

@@ -25,6 +25,7 @@ endif()
 # Add source files
 
 AUX_SOURCE_DIRECTORY(./http SOURCE_LIST)
+AUX_SOURCE_DIRECTORY(./utils SOURCE_LIST)
 
 # Debug messages
 

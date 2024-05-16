@@ -66,13 +66,9 @@ void HTTP_Request::show() const
     spdlog::debug("{} {} {}",
                   method_, uri, version_);
 
-    headers_.walk([](const char* key, const char* value) {
-        spdlog::debug("{}: {}", key, value);
-        return true;
-    });
+    print_headers();
 
-    if (!body_.empty())
-        spdlog::debug("Body: {}", body_);
+    print_body();
 }
 
 bool HTTP_Request::parse_uri(const std::string& line)

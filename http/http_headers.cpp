@@ -12,6 +12,7 @@ HTTP_Headers::HTTP_Headers()
 
 bool HTTP_Headers::add(const string& header)
 {
+    // TODO: Use regex to aviod bug.
     const auto pos = header.find(SEPARATOR);
     if (pos == string::npos)
         return false;
