@@ -1,5 +1,6 @@
 #include "http_response.h"
 
+#include <json/json.h>
 #include <spdlog/spdlog.h>
 
 HTTP_Response::HTTP_Response()
@@ -33,11 +34,7 @@ void HTTP_Response::show() const
     spdlog::debug("{} {} {}",
                   version_, status_, res_phrase_);
 
-    headers_.walk([](const char* key, const char* value) {
-        spdlog::debug("{}: {}", key, value);
-        return true;
-    });
+    print_headers();
 
-    if (!body_.empty())
-        spdlog::debug("Body: {}", body_);
+    print_body();
 }
