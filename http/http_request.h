@@ -21,6 +21,12 @@ public:
 
     void show() const override;
 
+    bool keep_alive() const;
+
+    unsigned long content_length() const;
+
+    bool chunked() const;
+
 private:
     bool parse_uri(const std::string& line);
 
