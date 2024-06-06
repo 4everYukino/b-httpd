@@ -71,6 +71,25 @@ void HTTP_Request::show() const
     print_body();
 }
 
+bool HTTP_Request::keep_alive() const
+{
+    return headers_.get("Connection") == "Keep-Alive";
+}
+
+unsigned long HTTP_Request::content_length() const
+{
+    auto val = headers_.get("Content-Length");
+    if (val.empty())
+        return 0;
+
+    return ::strtoul(val.c_str(), nullptr, 10);
+}
+
+bool HTTP_Request::chunked() const
+{
+    return headers_.get("Transfer-Encoding") == "chunked";
+}
+
 bool HTTP_Request::parse_uri(const std::string& line)
 {
     auto pos = line.find('?');
