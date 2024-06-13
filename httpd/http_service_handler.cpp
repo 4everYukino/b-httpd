@@ -26,10 +26,12 @@ bool HTTP_Service_Handler::run()
                   stream_.addr());
 
     bool rc = run_i();
+
     spdlog::debug("HTTP_Service_Handler(ID: {}) finished client '{}'.",
                   id_,
                   stream_.addr());
-    return rc;
+
+    return rc && state_ != STATE_ERROR;
 }
 
 bool HTTP_Service_Handler::run_i()
@@ -38,6 +40,7 @@ bool HTTP_Service_Handler::run_i()
         spdlog::error("Failed to read data from client '{}'.",
                       stream_.addr());
         // 500 Server Internal ERROR
+        state_ = STATE_ERROR;
         return false;
     }
 
@@ -140,6 +143,7 @@ Handle_Status HTTP_Service_Handler::handle_header_receiving()
     case HEADERS_PARSER_STATE_ERROR:
         spdlog::error("Failed to parse HTTP headers from client '{}'.",
                       stream_.addr());
+        state_ = STATE_ERROR;
         return HANDLE_EXIT;
 
     case HEADERS_PARSER_STATE_COMPLATE:
@@ -159,7 +163,11 @@ Handle_Status HTTP_Service_Handler::handle_header_received()
 {
     interface_handler_.reset(HTTP_Interface_Handler_Map::instance().find(request_.uri()));
     if (!interface_handler_) {
+        spdlog::error("Failed to find handler to handle '{}'.",
+                      request_.uri());
         // 404 NOT FOUND
+        state_ = STATE_ERROR;
+        return HANDLE_EXIT;
     }
 
     if (interface_handler_->handle_request(request_)) {
@@ -167,6 +175,7 @@ Handle_Status HTTP_Service_Handler::handle_header_received()
                       request_.uri(),
                       interface_handler_->name());
         // 500 Server Internal ERROR
+        state_ = STATE_ERROR;
         return HANDLE_EXIT;
     }
 
@@ -209,6 +218,7 @@ Handle_Status HTTP_Service_Handler::handle_content_receiving()
 
             case CHUNKED_PARSER_STATE_ERROR:
                 spdlog::error("Failed to parse content from client '{}'.", stream_.addr());
+                state_ = STATE_ERROR;
                 return HANDLE_EXIT;
             }
         } while (state_ != STATE_CONTENT_RECEIVED);
@@ -233,6 +243,7 @@ Handle_Status HTTP_Service_Handler::handle_content_receiving()
                           content_received_,
                           content_length_);
             // 500 Server Internal ERROR
+            state_ = STATE_ERROR;
             return HANDLE_EXIT;
         }
 
@@ -253,6 +264,7 @@ Handle_Status HTTP_Service_Handler::handle_content_received()
         spdlog::error("Failed to get response to response client '{}'.",
                       stream_.addr());
         // 500 Server Internal ERROR
+        state_ = STATE_ERROR;
         return HANDLE_EXIT;
     }
 
@@ -260,6 +272,7 @@ Handle_Status HTTP_Service_Handler::handle_content_received()
     if (!response_.to_iovec(vec)) {
         spdlog::error("Failed to seperate response to iovec.");
         // 500 Server Internal ERROR
+        state_ = STATE_ERROR;
         return HANDLE_EXIT;
     }
 
@@ -268,6 +281,14 @@ Handle_Status HTTP_Service_Handler::handle_content_received()
                       stream_.addr(),
                       errno,
                       strerror(errno));
+        state_ = STATE_ERROR;
+        return HANDLE_EXIT;
+    }
+
+    if (!interface_handler_->send_content(&stream_)) {
+        spdlog::error("Failed to send content to client '{}'.",
+                      stream_.addr());
+        state_ = STATE_ERROR;
         return HANDLE_EXIT;
     }
 

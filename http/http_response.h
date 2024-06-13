@@ -6,7 +6,7 @@
 class HTTP_Response : public HTTP_Base
 {
 public:
-    HTTP_Response();
+    void reset() override;
 
     void status(int status);
     int status() const;

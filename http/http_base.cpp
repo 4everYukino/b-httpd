@@ -11,11 +11,6 @@ using boost::split;
 using boost::is_any_of;
 using namespace std;
 
-HTTP_Base::HTTP_Base()
-{
-
-}
-
 void HTTP_Base::version(const char* version)
 {
     if (version)

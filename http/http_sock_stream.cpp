@@ -64,6 +64,11 @@ size_t HTTP_Sock_Stream::read(char* buffer, size_t len)
     return ::read(fd_, buffer, len);
 }
 
+size_t HTTP_Sock_Stream::write(char* buffer, size_t len)
+{
+    return ::write(fd_, buffer, len);
+}
+
 bool HTTP_Sock_Stream::write(const std::vector<iovec>& vec)
 {
     size_t count = 0;

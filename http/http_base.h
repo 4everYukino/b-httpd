@@ -11,8 +11,6 @@
 class HTTP_Base
 {
 public:
-    HTTP_Base();
-
     virtual void reset() = 0;
 
     void version(const char* version);

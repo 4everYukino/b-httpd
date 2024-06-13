@@ -16,6 +16,8 @@ public:
 
     size_t read(char* buffer, size_t len);
 
+    size_t write(char* buffer, size_t len);
+
     bool write(const std::vector<iovec>& vec);
 
 private:

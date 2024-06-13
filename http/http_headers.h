@@ -10,7 +10,7 @@ using headers_map = std::unordered_map<std::string, std::string>;
 class HTTP_Headers
 {
 public:
-    HTTP_Headers();
+    void reset();
 
     bool add(const std::string& header);
     bool add(const char* key, const char* value);

@@ -3,9 +3,13 @@
 #include <json/json.h>
 #include <spdlog/spdlog.h>
 
-HTTP_Response::HTTP_Response()
+void HTTP_Response::reset()
 {
-
+    version_.clear();
+    status_ = 0;
+    res_phrase_.clear();
+    headers_.reset();
+    body_.clear();
 }
 
 void HTTP_Response::status(int status)

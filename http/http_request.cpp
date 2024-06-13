@@ -4,9 +4,13 @@
 
 #include <spdlog/spdlog.h>
 
-HTTP_Request::HTTP_Request()
+void HTTP_Request::reset()
 {
-
+    method_.clear();
+    uri_.clear();
+    version_.clear();
+    headers_.reset();
+    body_.clear();
 }
 
 void HTTP_Request::method(const char* method)

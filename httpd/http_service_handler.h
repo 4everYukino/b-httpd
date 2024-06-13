@@ -20,6 +20,8 @@
 
 enum HTTP_Service_State
 {
+    STATE_ERROR,
+
     STATE_CONNECTING,
     STATE_CONNECTED,
 

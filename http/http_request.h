@@ -6,7 +6,7 @@
 class HTTP_Request : public HTTP_Base
 {
 public:
-    HTTP_Request();
+    void reset() override;
 
     void method(const char* method);
     const char* method() const;

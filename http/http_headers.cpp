@@ -5,9 +5,9 @@
 
 using namespace std;
 
-HTTP_Headers::HTTP_Headers()
+void HTTP_Headers::reset()
 {
-
+    maps_.clear();
 }
 
 bool HTTP_Headers::add(const string& header)
